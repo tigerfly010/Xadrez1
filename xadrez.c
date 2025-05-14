@@ -1,49 +1,87 @@
 #include <stdio.h>
 
-int main() {
-    // === Movimento da Torre (FOR) ===
-    int i;
-    printf("Movimento da Torre (FOR):\n");
-    for (i = 1; i <= 5; i++) {
-        printf("Direita\n");
+// ==========================
+// Funções Recursivas
+// ==========================
+
+// TORRE: Move-se 5 casas para a direita (recursão simples)
+void moverTorre(int passosRestantes) {
+    if (passosRestantes == 0) return;
+    printf("Direita\n");
+    moverTorre(passosRestantes - 1);
+}
+
+// BISPO: Move-se 5 casas na diagonal superior direita (recursão + loops aninhados)
+void moverBispo(int passosVerticais, int passosHorizontais) {
+    if (passosVerticais == 0 || passosHorizontais == 0) return;
+
+    for (int v = 0; v < passosVerticais; v++) {
+        for (int h = 0; h < passosHorizontais; h++) {
+            printf("Cima Direita\n");
+            // A chamada recursiva é feita apenas uma vez por "movimento combinado"
+            moverBispo(passosVerticais - 1, passosHorizontais - 1);
+            return;
+        }
     }
+}
 
-    // === Movimento do Bispo (WHILE) ===
-    int j = 1;
-    printf("\nMovimento do Bispo (WHILE):\n");
-    while (j <= 5) {
-        printf("Cima Direita\n");
-        j++;
-    }
+// RAINHA: Move-se 8 casas para a esquerda (recursão simples)
+void moverRainha(int passosRestantes) {
+    if (passosRestantes == 0) return;
+    printf("Esquerda\n");
+    moverRainha(passosRestantes - 1);
+}
 
-    // === Movimento da Rainha (DO-WHILE) ===
-    int k = 1;
-    printf("\nMovimento da Rainha (DO-WHILE):\n");
-    do {
-        printf("Esquerda\n");
-        k++;
-    } while (k <= 8);
+// ==========================
+// Cavalo com Loops Complexos
+// ==========================
+void moverCavalo() {
+    // Duas casas para cima (vertical) e uma para a direita (horizontal)
+    const int movVertical = 2;
+    const int movHorizontal = 1;
 
-    // === Movimento do Cavalo (FOR + WHILE com loops aninhados) ===
-    printf("\nMovimento do Cavalo (FOR + WHILE):\n");
+    printf("\nMovimento do Cavalo (Loops complexos):\n");
 
-    // O Cavalo fará 1 movimento em "L": 2 casas para baixo e 1 para a esquerda
-    const int movimentos_verticais = 2;  // Baixo
-    const int movimentos_horizontais = 1;  // Esquerda
-
-    // Loop externo com FOR: simula os movimentos verticais (2x)
-    for (int v = 1; v <= movimentos_verticais; v++) {
-        printf("Baixo\n");
-
-        // Loop interno com WHILE: simula o movimento horizontal após o segundo "Baixo"
-        if (v == movimentos_verticais) {
+    for (int v = 1; v <= movVertical; v++) {
+        if (v == 2) {
             int h = 1;
-            while (h <= movimentos_horizontais) {
-                printf("Esquerda\n");
+            while (h <= movHorizontal) {
+                if (h == 1) {
+                    printf("Direita\n");
+                } else {
+                    // segurança, nunca vai cair aqui, mas demonstra controle de fluxo
+                    continue;
+                }
                 h++;
             }
         }
+        printf("Cima\n");
+
+        // Controle opcional de fluxo
+        if (v == 3) {
+            break; // segurança extra, nunca será atingido com movVertical = 2
+        }
     }
+}
+
+// ==========================
+// Função principal
+// ==========================
+int main() {
+    // === TORRE ===
+    printf("Movimento da Torre (Recursividade):\n");
+    moverTorre(5);
+
+    // === BISPO ===
+    printf("\nMovimento do Bispo (Recursividade + Loops Aninhados):\n");
+    moverBispo(5, 5);  // 5 casas diagonais (cima + direita)
+
+    // === RAINHA ===
+    printf("\nMovimento da Rainha (Recursividade):\n");
+    moverRainha(8);
+
+    // === CAVALO ===
+    moverCavalo();
 
     return 0;
 }
